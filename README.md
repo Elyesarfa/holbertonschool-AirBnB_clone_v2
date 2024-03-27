@@ -142,4 +142,4 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 <br>
 <br>
 <br>
-Elyes Arfa
+<h3>Elyes Arfa</h3>
