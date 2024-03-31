@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
-    """This class defines a city by various attributes"""
+    """Representation of city """
     if models.storage_t == "db":
         __tablename__ = 'cities'
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
