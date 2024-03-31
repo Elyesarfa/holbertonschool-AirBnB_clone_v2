@@ -42,6 +42,8 @@ class FileStorage:
 
     def reload(self):
         """Loads storage dictionary from file"""
+    file_path = "file.json"
+    if os.path.exists(file_path):
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
@@ -57,9 +59,14 @@ class FileStorage:
         }
         try:
             temp = {}
-            with open(FileStorage.__file_path, "r") as f:
-                temp = json.load(f)
+            with open(file_path, "r") as file:
+                temp = json.load(file)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val["__class__"]](**val)
-        except FileNotFoundError:
-            pass
+                    cls_name = val.get('__class__')
+                    if cls_name:
+                        cls = eval(cls_name)
+                        self.__objects[key] = cls(**val)
+        except Exception as e:
+            print("Error while reloading:", e)
+    else:
+        print("File not found:", file_path)
