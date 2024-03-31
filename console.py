@@ -121,10 +121,39 @@ class HBNBCommand(cmd.Cmd):
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+
+        kwargs = {}
+        for arg in args.split():
+            parts = arg.split('=')
+            if len(parts) != 2:
+                print("** invalid parameter format **")
+                return
+            key, value = parts
+            # Handling string value
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+                value = value.replace('_', ' ')
+                value = value.replace('\\"', '"')
+            # Handling float value
+            elif '.' in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    print("** invalid parameter format **")
+                    return
+            # Handling integer value
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    print("** invalid parameter format **")
+                    return
+
+            kwargs[key] = value
+
+        new_instance = HBNBCommand.classes[args](**kwargs)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
